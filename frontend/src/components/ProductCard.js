@@ -7,6 +7,8 @@ export default function ProductCard({ product }) {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  const imageSrc = product.image_url || '/images/product-placeholder.svg';
+
   async function handleAddToCart() {
     if (!user) {
       navigate('/login');
@@ -17,7 +19,15 @@ export default function ProductCard({ product }) {
 
   return (
     <div style={styles.card}>
-      <img src={product.image_url} alt={product.name} style={styles.img} />
+      <img
+        src={imageSrc}
+        alt={product.name}
+        style={styles.img}
+        onError={(e) => {
+          e.target.onerror = null;
+          e.target.src = '/images/product-placeholder.svg';
+        }}
+      />
       <h3>{product.name}</h3>
       <p style={styles.desc}>{product.description}</p>
       <p style={styles.price}>${Number(product.price).toFixed(2)}</p>
